@@ -1,7 +1,7 @@
 require "test_helper"
 require 'webmock/minitest'
 
-describe Lolcommits::Plugin::Hipchat do
+describe Lolcommits::Plugin::HipChat do
 
   include Lolcommits::TestHelpers::GitRepo
   include Lolcommits::TestHelpers::FakeIO
@@ -11,11 +11,11 @@ describe Lolcommits::Plugin::Hipchat do
   end
 
   it "should have a name" do
-    ::Lolcommits::Plugin::Hipchat.name.must_equal plugin_name
+    ::Lolcommits::Plugin::HipChat.name.must_equal plugin_name
   end
 
   it "should run on capture ready" do
-    ::Lolcommits::Plugin::Hipchat.runner_order.must_equal [:capture_ready]
+    ::Lolcommits::Plugin::HipChat.runner_order.must_equal [:capture_ready]
   end
 
   describe "with a runner" do
@@ -31,33 +31,25 @@ describe Lolcommits::Plugin::Hipchat do
     end
 
     def plugin
-      @plugin ||= Lolcommits::Plugin::Hipchat.new(runner: runner)
+      @plugin ||= Lolcommits::Plugin::HipChat.new(runner: runner)
+    end
+
+    def endpoint
+      config = plugin.config.read_configuration['hipchat']
+      "http://#{config['api_team']}.hipchat.com/v2/room/#{config['api_room']}/share/file?auth_token=#{config['api_token']}"
     end
 
     def valid_enabled_config
       @config ||= OpenStruct.new(
         read_configuration: {
           "hipchat" => {
-            "enabled" => true,
-            "endpoint" => "https://hipchat.com/uplol",
-            'optional_http_auth_username' => 'joe',
-            'optional_http_auth_password' => '1234'
+            "enabled"   => true,
+            "api_team"  => "lolcommits-team",
+            "api_token" => "f0FJmP9wfP9JxNeCYrwmSR9f86jJfxgMna1r6mXy",
+            "api_room"  => "lolcommits-room"
           }
         }
       )
-    end
-
-    describe "initalizing" do
-      it "assigns runner and all plugin options" do
-        plugin.runner.must_equal runner
-        plugin.options.must_equal %w(
-          enabled
-          endpoint
-          optional_key
-          optional_http_auth_username
-          optional_http_auth_password
-        )
-      end
     end
 
     describe "#enabled?" do
@@ -72,28 +64,34 @@ describe Lolcommits::Plugin::Hipchat do
     end
 
     describe "run_capture_ready" do
-      before { commit_repo_with_message("first commit!") }
+      before do
+        commit_repo_with_message("first commit!")
+        plugin.config = valid_enabled_config
+      end
+
       after { teardown_repo }
 
-      it "syncs lolcommits" do
+      it "posts lolcommit image and message to HipChat" do
         in_repo do
-          plugin.config = valid_enabled_config
+          stub_request(:post, endpoint).to_return(status: 204)
+          output = fake_io_capture { plugin.run_capture_ready }
+          output.must_equal "Posting to HipChat (lolcommits-room) ... done!\n"
 
-          stub_request(:post, "https://hipchat.com/uplol").to_return(status: 200)
-
-          plugin.run_capture_ready
-
-          assert_requested :post, "https://hipchat.com/uplol", times: 1,
-            headers: {'Content-Type' => /multipart\/form-data/ } do |req|
-            req.body.must_match(/Content-Disposition: form-data;.+name="file"; filename="main_image.jpg.+"/)
-            req.body.must_match 'name="repo"'
-            req.body.must_match 'name="author_name"'
-            req.body.must_match 'name="author_email"'
-            req.body.must_match 'name="sha"'
-            req.body.must_match 'name="key"'
-            req.body.must_match "plugin-test-repo"
-            req.body.must_match "first commit!"
+          assert_requested :post, endpoint, times: 1 do |req|
+            req.headers["Content-Type"].must_match /multipart\/related; boundary=/
+            req.body.must_match /{\"message\":\"commited some .+ to .+@.+ (.+) \"}/
           end
+        end
+      end
+
+      it "prompts user to check token when post to HipChat fails" do
+        in_repo do
+          stub_request(:post, endpoint).to_return(status: 401)
+          output = fake_io_capture { plugin.run_capture_ready }
+          output.split("\n").must_equal [
+            "Posting to HipChat (lolcommits-room) ... failed!",
+            "Are you sure your HipChat API token has the 'Send Message' scope?"
+          ]
         end
       end
     end
@@ -109,13 +107,12 @@ describe Lolcommits::Plugin::Hipchat do
       end
 
       it "allows plugin options to be configured" do
-        # enabled, endpoint, key, user, password
+        # enabled, token, team and room
         inputs = %w(
           true
-          https://my-server.com/uplol
-          key-123
-          joe
-          1337pass
+          lolcommits-team
+          my-token
+          lolcommits-room
         )
         configured_plugin_options = {}
 
@@ -124,18 +121,17 @@ describe Lolcommits::Plugin::Hipchat do
         end
 
         configured_plugin_options.must_equal({
-          "enabled" => true,
-          "endpoint" => "https://my-server.com/uplol",
-          "optional_key" => "key-123",
-          "optional_http_auth_username" => "joe",
-          "optional_http_auth_password" => "1337pass"
+          "enabled"   => true,
+          "api_team"  => "lolcommits-team",
+          "api_token" => "my-token",
+          "api_room"  => "lolcommits-room"
         })
       end
 
       describe "#valid_configuration?" do
         it "returns false for an invalid configuration" do
           plugin.config = OpenStruct.new(read_configuration: {
-            "lolsrv" => { "endpoint" => "gibberish" }
+            "hipchat" => { "api_team" => "set-but-other-keys-missing" }
           })
           plugin.valid_configuration?.must_equal false
         end

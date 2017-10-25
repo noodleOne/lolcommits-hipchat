@@ -1,8 +1,9 @@
+require 'mime/types'
 require 'lolcommits/plugin/base'
 
 module Lolcommits
   module Plugin
-    class Hipchat < Base
+    class HipChat < Base
 
       ##
       # Returns the name of this plugin.
@@ -31,21 +32,23 @@ module Lolcommits
       #
       def configured?
         super &&
-          configuration['api_token'] &&
-          configuration['api_team'] &&
-          configuration['api_room']
+          !!(configuration['api_token'] &&
+             configuration['api_team'] &&
+             configuration['api_room'])
       end
 
       ##
       # Returns true/false indicating if the plugin has been correctly
-      # configured. To post a message to HipChat all  plugin options must be
+      # configured. To post a message to HipChat all plugin options must be
       # set.
       #
       # @return [Boolean] true/false indicating if plugin is correctly
       # configured
       #
       def valid_configuration?
-        configuration.values.all? { |v| !v.to_s.strip.empty? }
+        %w(api_token api_team api_room).all? do |option|
+          !configuration[option].to_s.strip.empty?
+        end
       end
 
       ##
@@ -62,12 +65,12 @@ module Lolcommits
       end
 
       ##
-      # Post-capture hook, runs after lolcommits captures a snapshot. Sends a
-      # message to the configured HipChat room via their API (v2) using
+      # Post-capture hook, runs after lolcommits captures a snapshot. Shares the
+      # lolcommit to the configured HipChat room via their API (v2) using
       # Net::HTTP (POST) with a message and image attachment. See the HipChat
-      # documentation for more information:
+      # API documentation for more information:
       #
-      # https://developer.atlassian.com/hipchat/guide/sending-messages
+      # https://www.hipchat.com/docs/apiv2/method/share_file_with_room
       #
       # @return [Boolean] indicating if HipChat post was successful
       #
@@ -87,11 +90,14 @@ module Lolcommits
         if response.code == "204"
           print " done!\n"
           return true
-        elsif response.code ==  "401"
+        else
+          debug "Posting to HipChat failed with response code #{response.code}"
           print " failed!\n"
+        end
+
+        if response.code ==  "401"
           puts "Are you sure your HipChat API token has the 'Send Message' scope?"
         end
-        debug "Posting to HipChat failed with response code #{response.code}"
 
         false
       end
@@ -117,8 +123,8 @@ module Lolcommits
         room = parse_user_input(gets.strip)
 
         {
-          'api_token' => token,
           'api_team'  => teamname,
+          'api_token' => token,
           'api_room'  => room
         }
       end

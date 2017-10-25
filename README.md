@@ -1,28 +1,21 @@
-# Lolcommits Hipchat
+# Lolcommits HipChat
 
 [![Gem Version](https://img.shields.io/gem/v/lolcommits-hipchat.svg?style=flat)](http://rubygems.org/gems/lolcommits-hipchat)
 [![Travis Build Status](https://travis-ci.org/lolcommits/lolcommits-hipchat.svg?branch=master)](https://travis-ci.org/lolcommits/lolcommits-hipchat)
-[![Test Coverage](https://codeclimate.com/github/lolcommits/lolcommits-hipchat/badges/coverage.svg)](https://codeclimate.com/github/lolcommits/lolcommits-hipchat/coverage)
-[![Code Climate](https://codeclimate.com/github/lolcommits/lolcommits-hipchat/badges/gpa.svg)](https://codeclimate.com/github/lolcommits/lolcommits-hipchat)
-[![Gem Dependency Status](https://gemnasium.com/badges/github.com/lolcommits/lolcommits-hipchat.svg)](https://gemnasium.com/github.com/lolcommits/lolcommits-hipchat)
+[![Test Coverage](https://codeclimate.com/github/lolcommits/lolcommits-hipchat/coverage)](https://codeclimate.com/github/lolcommits/lolcommits-hipchat/test_coverage)
+[![Code Climate](https://api.codeclimate.com/v1/badges/d11d0fa605657e46dc23/maintainability)](https://codeclimate.com/github/lolcommits/lolcommits-hipchat/maintainability)
 
 [lolcommits](https://lolcommits.github.io/) takes a snapshot with your webcam
 every time you git commit code, and archives a lolcat style image with it. Git
 blame has never been so much fun!
 
-This plugin uploads each lolcommit to a remote server after capturing. You
-configure the plugin by setting a remote endpoint to handle the HTTP post
-request. The following params will be sent:
+This plugin shares lolcommit images to a HipChat room, along with a randomized
+message with the commit SHA. Your lolcommit will appear like this (perhaps
+without the horse):
 
-* `file` - captured lolcommit image file
-* `message` - the commit message
-* `repo` - repository name e.g. mroth/lolcommits
-* `sha` - commit SHA
-* `author_name` - the commit author name
-* `author_email` - the commit author email address
-* `key` - optional key (string) from plugin config
+![example
+commit](https://github.com/lolcommits/lolcommits-hipchat/raw/master/assets/images/example-commit.png)
 
-You can also set an optional HTTP Basic Auth header (username and/or password).
 
 ## Requirements
 
@@ -37,15 +30,16 @@ After installing the lolcommits gem, install this plugin with:
 
     $ gem install lolcommits-hipchat
 
-Then configure to enable and set the remote endpoint:
+Visit `https://your-team.hipchat.com/account/api` to create a new API token with
+the 'Send Message' scope set. Then configure the plugin to enable and set
+options:
 
     $ lolcommits --config -p hipchat
     # set enabled to `true`
-    # set the remote endpoint (must begin with http(s)://)
-    # optionally set a key (sent in params) and/or HTTP Basic Auth credentials
+    # enter your HipChat team name, API token and room (name or id)
 
-That's it! Provided the endpoint responds correctly, your next lolcommit will be
-uploaded to it. To disable use:
+That's it! The next lolcommit will be shared to your HipChat room. To disable,
+uninstall this gem or use:
 
     $ lolcommits --config -p hipchat
     # and set enabled to `false`
