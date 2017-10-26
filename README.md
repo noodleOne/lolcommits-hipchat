@@ -2,7 +2,7 @@
 
 [![Gem Version](https://img.shields.io/gem/v/lolcommits-hipchat.svg?style=flat)](http://rubygems.org/gems/lolcommits-hipchat)
 [![Travis Build Status](https://travis-ci.org/lolcommits/lolcommits-hipchat.svg?branch=master)](https://travis-ci.org/lolcommits/lolcommits-hipchat)
-[![Test Coverage](https://codeclimate.com/github/lolcommits/lolcommits-hipchat/coverage)](https://codeclimate.com/github/lolcommits/lolcommits-hipchat/test_coverage)
+[![Test Coverage](https://api.codeclimate.com/v1/badges/d11d0fa605657e46dc23/test_coverage)](https://codeclimate.com/github/lolcommits/lolcommits-hipchat/coverage)
 [![Code Climate](https://api.codeclimate.com/v1/badges/d11d0fa605657e46dc23/maintainability)](https://codeclimate.com/github/lolcommits/lolcommits-hipchat/maintainability)
 
 [lolcommits](https://lolcommits.github.io/) takes a snapshot with your webcam
