@@ -78,8 +78,8 @@ describe Lolcommits::Plugin::HipChat do
           output.must_equal "Posting to HipChat (lolcommits-room) ... done!\n"
 
           assert_requested :post, endpoint, times: 1 do |req|
-            req.headers["Content-Type"].must_match /multipart\/related; boundary=/
-            req.body.must_match /{\"message\":\"commited some .+ to .+@.+ (.+) \"}/
+            req.headers["Content-Type"].must_match(/multipart\/related; boundary=/)
+            req.body.must_match(/{\"message\":\"commited some .+ to .+@.+ (.+) \"}/)
           end
         end
       end

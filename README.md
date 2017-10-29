@@ -19,6 +19,7 @@ commit](https://github.com/lolcommits/lolcommits-hipchat/raw/master/assets/image
 
 ## Requirements
 
+* [Lolcommits](https://lolcommits.github.io/) >= 0.9.5
 * Ruby >= 2.0.0
 * A webcam
 * [ImageMagick](http://www.imagemagick.org)
@@ -31,12 +32,11 @@ After installing the lolcommits gem, install this plugin with:
     $ gem install lolcommits-hipchat
 
 Visit `https://your-team.hipchat.com/account/api` to create a new API token with
-the 'Send Message' scope set. Then configure the plugin to enable and set
-options:
+the 'Send Message' scope set. Then configure the plugin to enable it:
 
     $ lolcommits --config -p hipchat
     # set enabled to `true`
-    # enter your HipChat team name, API token and room (name or id)
+    # when prompted, enter your HipChat team name, API token and room (name or id)
 
 That's it! The next lolcommit will be shared to your HipChat room. To disable,
 uninstall this gem or use:

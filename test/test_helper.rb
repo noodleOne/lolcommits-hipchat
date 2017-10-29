@@ -15,7 +15,7 @@ if ENV['COVERAGE']
 end
 
 # plugin gem test libs
-require 'lolcommits/hip_chat'
+require 'lolcommits/hipchat'
 require 'minitest/autorun'
 
 # swallow all debug output during test runs
