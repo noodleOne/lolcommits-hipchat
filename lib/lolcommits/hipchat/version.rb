@@ -1,5 +1,5 @@
 module Lolcommits
-  module HipChat
+  module Hipchat
     VERSION = "0.0.4".freeze
   end
 end

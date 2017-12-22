@@ -1,11 +1,11 @@
 # coding: utf-8
 lib = File.expand_path('../lib', __FILE__)
 $LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
-require 'lolcommits/hip_chat/version'
+require 'lolcommits/hipchat/version'
 
 Gem::Specification.new do |spec|
   spec.name          = "lolcommits-hipchat"
-  spec.version       = Lolcommits::HipChat::VERSION
+  spec.version       = Lolcommits::Hipchat::VERSION
   spec.authors       = ["Matthew Hutchinson"]
   spec.email         = ["matt@hiddenloop.com"]
   spec.summary       = %q{Uploads lolcommits to a remote server}

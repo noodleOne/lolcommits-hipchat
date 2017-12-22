@@ -3,7 +3,7 @@ require 'lolcommits/plugin/base'
 
 module Lolcommits
   module Plugin
-    class HipChat < Base
+    class Hipchat < Base
 
       ##
       # Returns the name of this plugin.

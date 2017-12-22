@@ -1,7 +1,7 @@
 require "test_helper"
 require 'webmock/minitest'
 
-describe Lolcommits::Plugin::HipChat do
+describe Lolcommits::Plugin::Hipchat do
 
   include Lolcommits::TestHelpers::GitRepo
   include Lolcommits::TestHelpers::FakeIO
@@ -11,11 +11,11 @@ describe Lolcommits::Plugin::HipChat do
   end
 
   it "should have a name" do
-    ::Lolcommits::Plugin::HipChat.name.must_equal plugin_name
+    ::Lolcommits::Plugin::Hipchat.name.must_equal plugin_name
   end
 
   it "should run on capture ready" do
-    ::Lolcommits::Plugin::HipChat.runner_order.must_equal [:capture_ready]
+    ::Lolcommits::Plugin::Hipchat.runner_order.must_equal [:capture_ready]
   end
 
   describe "with a runner" do
@@ -31,7 +31,7 @@ describe Lolcommits::Plugin::HipChat do
     end
 
     def plugin
-      @plugin ||= Lolcommits::Plugin::HipChat.new(runner: runner)
+      @plugin ||= Lolcommits::Plugin::Hipchat.new(runner: runner)
     end
 
     def endpoint

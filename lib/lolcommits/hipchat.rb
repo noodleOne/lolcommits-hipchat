@@ -1,2 +1,2 @@
-require 'lolcommits/hip_chat/version'
-require 'lolcommits/plugin/hip_chat'
+require 'lolcommits/hipchat/version'
+require 'lolcommits/plugin/hipchat'
