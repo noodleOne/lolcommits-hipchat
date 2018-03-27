@@ -7,16 +7,6 @@ module Lolcommits
     class Hipchat < Base
 
       ##
-      # Returns position(s) of when this plugin should run during the capture
-      # process. A new message is posted to HipChat when the capture is ready.
-      #
-      # @return [Array] the position(s) (:capture_ready)
-      #
-      def self.runner_order
-        [:capture_ready]
-      end
-
-      ##
       # Returns true/false indicating if the plugin has been correctly
       # configured. To post a message to HipChat all plugin options must be
       # set.
