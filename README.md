@@ -1,10 +1,10 @@
 # Lolcommits HipChat
 
-[![Gem Version](https://img.shields.io/gem/v/lolcommits-hipchat.svg?style=flat)](http://rubygems.org/gems/lolcommits-hipchat)
-[![Travis Build Status](https://travis-ci.org/lolcommits/lolcommits-hipchat.svg?branch=master)](https://travis-ci.org/lolcommits/lolcommits-hipchat)
+[![Gem](https://img.shields.io/gem/v/lolcommits-hipchat.svg?style=flat)](http://rubygems.org/gems/lolcommits-hipchat)
+[![Travis](https://travis-ci.org/lolcommits/lolcommits-hipchat.svg?branch=master)](https://travis-ci.org/lolcommits/lolcommits-hipchat)
+[![Depfu](https://img.shields.io/depfu/lolcommits/lolcommits-hipchat.svg?style=flat)](https://depfu.com/github/lolcommits/lolcommits-hipchat)
 [![Maintainability](https://img.shields.io/codeclimate/maintainability/lolcommits/lolcommits-hipchat.svg)](https://codeclimate.com/github/lolcommits/lolcommits-hipchat/maintainability)
 [![Test Coverage](https://img.shields.io/codeclimate/c/lolcommits/lolcommits-hipchat.svg)](https://codeclimate.com/github/lolcommits/lolcommits-hipchat/test_coverage)
-[![Gem Dependency Status](https://gemnasium.com/badges/github.com/lolcommits/lolcommits-hipchat.svg)](https://gemnasium.com/github.com/lolcommits/lolcommits-hipchat)
 
 [lolcommits](https://lolcommits.github.io/) takes a snapshot with your webcam
 every time you git commit code, and archives a lolcat style image with it. Git
